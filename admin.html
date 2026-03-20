@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BINGWA POS - Admin Dashboard</title>
+    <style>
+        :root {
+            --midnight: #0f172a;
+            --emerald: #10b981;
+            --slate: #64748b;
+            --light: #f8fafc;
+        }
+
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--light); display: flex; height: 100vh; color: var(--midnight); }
+
+        /* Sidebar */
+        .sidebar { width: 250px; background: var(--midnight); color: white; padding: 25px; display: flex; flex-direction: column; }
+        .sidebar h2 { color: var(--emerald); margin-bottom: 30px; letter-spacing: -1px; }
+        .sidebar a { color: #94a3b8; text-decoration: none; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; transition: 0.3s; }
+        .sidebar a:hover, .sidebar a.active { background: #1e293b; color: white; }
+
+        /* Layout */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+
+        /* Cards */
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--emerald); }
+        h3 { margin-top: 0; margin-bottom: 20px; }
+
+        /* Form Elements */
+        form { display: flex; flex-direction: column; gap: 12px; }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--slate); margin-bottom: -8px; }
+        input, select { padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; }
+        input:focus, select:focus { border-color: var(--emerald); outline: none; }
+
+        .btn-add { background: var(--emerald); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-add:hover { opacity: 0.9; transform: scale(0.98); }
+
+        /* Inventory Table */
+        .table-card { margin-top: 30px; border-left: none; border-top: 5px solid var(--midnight); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid #f1f5f9; color: var(--slate); font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .btn-del { color: #ef4444; border: none; background: none; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>BINGWA POS</h2>
+        <a href="admin.html" class="active">Dashboard</a>
+        <a href="index.html">Terminal</a>
+        <a href="sales_history.html">Sales History</a>
+        <a href="logout.php" style="margin-top: auto; color: #fb7185;">Logout</a>
+    </nav>
+
+    <main class="main-content">
+        <h1>Inventory Management</h1>
+        
+        <div class="grid-layout">
+            <div class="card">
+                <h3>Add New Retail Item</h3>
+                <form id="add-product-form" enctype="multipart/form-data">
+                    <label>Product Name</label>
+                    <input type="text" name="name" placeholder="e.g. Local Mangoes" required>
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <div style="flex:1;">
+                            <label>Category</label>
+                            <select name="category_id" id="p-category" style="width:100%;" required>
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <label>Unit</label>
+                            <select name="unit" style="width:100%;">
+                                <option value="pcs">Pieces (pcs)</option>
+                                <option value="kg">Kilograms (kg)</option>
+                                <option value="bunch">Bunches</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Supplier</label>
+                    <select name="supplier_id" id="p-supplier" required>
+                        <option value="">Select Supplier</option>
+                    </select>
+
+                    <div style="display: flex; gap: 15px;">
+                        <div style="flex:1;">
+                            <label>Buying Price</label>
+                            <input type="number" step="0.01" name="buying_price" placeholder="0.00" required>
+                        </div>
+                        <div style="flex:1;">
+                            <label>Selling Price</label>
+                            <input type="number" step="0.01" name="selling_price" placeholder="0.00" required>
+                        </div>
+                    </div>
+
+                    <label>Initial Stock Level</label>
+                    <input type="number" step="0.01" name="stock_quantity" placeholder="0.00" required>
+                    
+                    <label>Product Photo</label>
+                    <input type="file" name="product_image" accept="image/*" required>
+                    
+                    <button type="submit" class="btn-add">Upload & Save Product</button>
+                </form>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card" style="border-left-color: var(--midnight);">
+                    <h3>Add Category</h3>
+                    <form id="add-category-form">
+                        <input type="text" name="name" placeholder="e.g. Fruits" required>
+                        <button type="submit" class="btn-add" style="background: var(--midnight);">Add Category</button>
+                    </form>
+                </div>
+
+                <div class="card" style="border-left-color: var(--slate);">
+                    <h3>Add Supplier</h3>
+                    <form id="add-supplier-form">
+                        <input type="text" name="name" placeholder="e.g. Market Vendor A" required>
+                        <input type="text" name="contact" placeholder="Contact Details">
+                        <button type="submit" class="btn-add" style="background: var(--slate);">Add Supplier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card table-card">
+            <h3>Current Inventory</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit</th>
+                        <th>Stock</th>
+                        <th>Price (KES)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BINGWA POS - Premium Retail</title>
+    <style>
+        :root {
+            --primary: #0f172a; 
+            --accent: #10b981; 
+            --warning: #f59e0b; 
+            --danger: #ef4444; 
+            --light: #f8fafc;
+        }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--light); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar Navigation */
+        .nav-sidebar { width: 80px; background: var(--primary); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 25px; }
+        .nav-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; color: #94a3b8; text-decoration: none; font-size: 20px; }
+        .nav-icon:hover, .nav-icon.active { background: var(--accent); color: white; }
+
+        /* Main Content */
+        .main-content { flex: 2; padding: 25px; display: flex; flex-direction: column; }
+        .search-bar { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; margin-bottom: 20px; outline: none; transition: 0.3s; }
+        .search-bar:focus { border-color: var(--accent); }
+        .category-filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .cat-btn { padding: 8px 20px; border: none; background: #fff; border-radius: 20px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; transition: 0.3s; }
+        .cat-btn.active { background: var(--primary); color: white; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 15px; overflow-y: auto; }
+        .product-card { background: #fff; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid transparent; }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+
+        /* Sidebar Cart */
+        .sidebar { width: 380px; background: #fff; padding: 20px; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; box-shadow: -5px 0 15px rgba(0,0,0,0.02); }
+        .cart-items { flex-grow: 1; overflow-y: auto; margin-top: 10px; }
+        .totals { background: var(--light); padding: 15px; border-radius: 10px; margin-top: 15px; }
+        .btn-pay { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 8px; transition: 0.3s; color: white; font-size: 14px; }
+        .btn-pay:hover { opacity: 0.9; transform: scale(0.98); }
+
+        /* Receipt View */
+        .receipt-container { display: none; width: 300px; font-family: 'Courier New', monospace; padding: 20px; border: 1px solid #eee; }
+        @media print {
+            body * { visibility: hidden; }
+            .receipt-container, .receipt-container * { visibility: visible; }
+            .receipt-container { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-sidebar">
+        <a href="index.html" class="nav-icon active">🛒</a>
+        <a href="admin.html" class="nav-icon">⚙️</a>
+        <a href="sales_history.html" class="nav-icon">📊</a>
+        <a href="logout.php" class="nav-icon" style="margin-top: auto; color: var(--danger);">🚪</a>
+    </nav>
+
+    <div class="main-content">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1 style="font-weight: 800; letter-spacing: -1px;">BINGWA <span style="color:var(--accent);">POS</span></h1>
+            <span style="color: var(--slate); font-size: 0.9rem;">Wednesday, 11:30 AM Build</span>
+        </div>
+        
+        <input type="text" class="search-bar" id="search" placeholder="Search products (e.g. Mangoes, Uniforms)..." autocomplete="off">
+        
+        <div class="category-filters" id="category-filters">
+            <button class="cat-btn active" onclick="filterByCategory(null)">All Items</button>
+            </div>
+
+        <div class="product-grid" id="product-list">
+            </div>
+    </div>
+
+    <div class="sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin:0;">Current Order</h2>
+            <button onclick="clearCart()" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:700; font-size:12px;">EMPTY CART ↺</button>
+        </div>
+
+        <div class="cart-items" id="cart">
+            </div>
+
+        <div class="totals">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Subtotal</span><span id="subtotal">KES 0.00</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>VAT (16% Incl)</span><span id="tax">KES 0.00</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:1.5rem; font-weight:800; border-top:1px solid #ddd; margin-top:10px; padding-top:10px;">
+                <span>Total</span><span id="total">KES 0.00</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--primary);">CUSTOMER PHONE (WHATSAPP)</label>
+            <input type="text" id="customer-phone" class="search-bar" placeholder="2547..." style="margin-top:5px; padding: 12px;">
+        </div>
+
+        <button onclick="processSale('M-Pesa')" style="background:var(--accent);" class="btn-pay">PAY WITH M-PESA</button>
+        <button onclick="processSale('Cash')" style="background:var(--primary);" class="btn-pay">PAY WITH CASH</button>
+        <button onclick="processSale('On Credit')" style="background:var(--warning);" class="btn-pay">RECORD AS DEBT (BNPL)</button>
+    </div>
+
+    <div id="receipt-container" class="receipt-container">
+        <center>
+            <h2 style="margin-bottom: 5px;">BINGWA RETAIL</h2>
+            <p style="font-size: 12px; margin: 0;">Quality Physical Goods</p>
+            <hr>
+        </center>
+        <p>Receipt: <span id="r-no">#001</span></p>
+        <p>Date: <span id="r-date"></span></p>
+        <hr>
+        <table style="width: 100%; font-size: 12px;">
+            <thead><tr><th align="left">Item</th><th>Qty</th><th align="right">Total</th></tr></thead>
+            <tbody id="r-items"></tbody>
+        </table>
+        <hr>
+        <div style="text-align: right; font-size: 14px;">
+            <p>Subtotal: <span id="r-sub"></span></p>
+            <p>VAT (16%): <span id="r-tax"></span></p>
+            <h3 style="margin-top:5px;">Total: <span id="r-total"></span></h3>
+        </div>
+        <center><p style="font-size: 10px;">Thank you for shopping at Bingwa!</p></center>
+    </div>
+
+    <script src="pos.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+/* --- BINGWA RETAIL POS: FULL PREMIUM MIDNIGHT EMERALD THEME --- */
+/* */
+
+:root {
+    --midnight: #0f172a;    /* Professional Sidebar & Headers */
+    --emerald: #10b981;     /* Success Green & Action Buttons */
+    --slate: #64748b;       /* Secondary Meta-text */
+    --light-bg: #f8fafc;    /* Clean Workspace Background */
+    --danger: #ef4444;      /* High-alert Stock/Delete */
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    background-color: var(--light-bg);
+    display: flex;
+    height: 100vh;
+    color: var(--midnight);
+}
+
+/* --- SIDEBAR NAVIGATION --- */
+.sidebar {
+    width: 250px;
+    background: var(--midnight);
+    color: white;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar h2 {
+    color: var(--emerald);
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    letter-spacing: -1px;
+}
+
+.sidebar a {
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: 0.3s ease;
+    display: block;
+    font-weight: 500;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    background: #1e293b;
+    color: white;
+}
+
+/* --- MAIN CONTENT & SEARCH --- */
+.main-content {
+    flex: 2;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 18px 25px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-bar:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* --- CATEGORY FILTER BUTTONS --- */
+.category-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.cat-btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.cat-btn.active {
+    background: var(--midnight);
+    color: white;
+    border-color: var(--midnight);
+}
+
+/* --- PRODUCT GRID & CARDS --- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #f1f5f9;
+    text-align: center;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-8px); /* Lift effect for items like Mangoes */
+    border-color: var(--emerald);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+
+.product-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--midnight);
+}
+
+.product-stock {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin-bottom: 15px;
+}
+
+.product-price {
+    color: var(--emerald);
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+/* --- CART & SUMMARY SECTION --- */
+.cart-section {
+    width: 400px;
+    background: white;
+    border-left: 1px solid #e2e8f0;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 15px rgba(0,0,0,0.02);
+}
+
+.cart-items {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.total-summary {
+    background: #f1f5f9;
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: var(--slate);
+    font-weight: 500;
+}
+
+.grand-total {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--midnight);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #cbd5e1;
+    margin-top: 15px;
+    padding-top: 15px;
+}
+
+/* --- ACTION BUTTONS --- */
+.btn-cash {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    width: 100%;
+    margin-top: 20px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-mpesa {
+    background: var(--emerald);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    width: 100%;
+    margin-top: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cash:hover, .btn-mpesa:hover {
+    transform: scale(0.98);
+    opacity: 0.95;
+}
+
+/* --- UTILITY --- */
+.text-danger { color: var(--danger); font-weight: bold; }
